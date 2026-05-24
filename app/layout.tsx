@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       style={{ backgroundColor: "#080B14" }}
     >
       <head>
-        <script src="https://elevenlabs.io/convai-widget/index.js" async />
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript" />
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{
