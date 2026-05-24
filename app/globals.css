@@ -360,13 +360,3 @@ body {
   [style*="navOrbit"] { animation: none !important; }
 }
 
-/* ── ElevenLabs widget — force bottom-left ────────── */
-elevenlabs-convai {
-  position: fixed !important;
-  bottom: 1.5rem !important;
-  left: 1.5rem !important;
-  right: auto !important;
-  inset-inline-start: 1.5rem !important;
-  inset-inline-end: auto !important;
-  z-index: 49 !important;
-}
