@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Tajawal, Inter } from "next/font/google";
+import Script from "next/script";
 import { LangProvider } from "@/lib/LangContext";
 import "./globals.css";
 
@@ -77,9 +78,8 @@ Cal.ns["جلسة-استشارية"]("ui", {"hideEventTypeDetails":false,"layout"
         style={{ backgroundColor: "#080B14", color: "#F8FAFF", overflowX: "hidden" }}
       >
         <LangProvider>{children}</LangProvider>
-        {/* ElevenLabs widget — exact embed code */}
         <elevenlabs-convai agent-id="agent_9501kscssx5he0dsbkhb2e6wjm07"></elevenlabs-convai>
-        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript" />
+        <Script src="https://unpkg.com/@elevenlabs/convai-widget-embed" strategy="afterInteractive" />
       </body>
     </html>
   );
