@@ -1,5 +1,4 @@
 "use client";
-import Script from "next/script";
 import { useLang } from "@/lib/LangContext";
 
 const WA_NUMBER = "TODO_WA_NUMBER"; // TODO: replace with real WhatsApp number
@@ -9,13 +8,6 @@ export default function FloatingButtons() {
 
   return (
     <>
-      {/* ElevenLabs widget + its script together exactly as ElevenLabs provides */}
-      <elevenlabs-convai agent-id="agent_9501kscssx5he0dsbkhb2e6wjm07"></elevenlabs-convai>
-      <Script
-        src="https://unpkg.com/@elevenlabs/convai-widget-embed"
-        strategy="afterInteractive"
-      />
-
       {/* WhatsApp — bottom left, above ElevenLabs widget */}
       <a
         href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(

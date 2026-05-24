@@ -77,6 +77,9 @@ Cal.ns["جلسة-استشارية"]("ui", {"hideEventTypeDetails":false,"layout"
         style={{ backgroundColor: "#080B14", color: "#F8FAFF", overflowX: "hidden" }}
       >
         <LangProvider>{children}</LangProvider>
+        {/* ElevenLabs widget — exact embed code */}
+        <elevenlabs-convai agent-id="agent_9501kscssx5he0dsbkhb2e6wjm07"></elevenlabs-convai>
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript" />
       </body>
     </html>
   );
