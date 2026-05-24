@@ -78,7 +78,7 @@ function VoiceTab({ lang, tx }: { lang: string; tx: any }) {
       <p className="text-gray-400 max-w-sm text-sm leading-relaxed">{tx.desc}</p>
 
       <div className="w-full flex flex-col items-center gap-4">
-        <elevenlabs-convai agent-id="agent_5201kse07m9nehpta0e063w3hxg0" />
+        <elevenlabs-convai agent-id="agent_6801kse15x6afb3t77e4nrqhvfrb" />
         <p className="text-xs text-gray-600">{tx.note}</p>
       </div>
     </div>
