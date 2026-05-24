@@ -25,7 +25,7 @@ export default function CaseStudies() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {(tx.cases as Array<typeof tx.cases[number] & { status?: string }>).map((c, i) => {
+          {(tx.cases as unknown as Array<Record<string, any>>).map((c, i) => {
             const isDev = c.status === "dev";
             return (
               <motion.div
@@ -56,7 +56,7 @@ export default function CaseStudies() {
                   <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-1">{c.desc}</p>
 
                   <ul className="space-y-2 mb-5">
-                    {c.results.map((r, j) => (
+                    {(c.results as string[]).map((r: string, j: number) => (
                       <li key={j} className="flex items-start gap-2 text-sm">
                         <Check size={14} className="shrink-0 mt-0.5" style={{ color: c.dot }} />
                         <span className="text-gray-300">{r}</span>
