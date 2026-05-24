@@ -25,17 +25,35 @@ export async function POST(req: NextRequest) {
 
     const data = await res.json();
 
-    // Flatten slots into a simple array for the agent
-    const slots: string[] = [];
+    // Format slots in Riyadh time, human-readable
+    const slots: { iso: string; display: string }[] = [];
+
     if (data?.data?.slots) {
       for (const [, daySlots] of Object.entries(data.data.slots)) {
         for (const slot of daySlots as Array<{ time: string }>) {
-          slots.push(slot.time);
+          const date = new Date(slot.time);
+          const display = date.toLocaleString("ar-SA", {
+            timeZone: "Asia/Riyadh",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          });
+          slots.push({ iso: slot.time, display });
         }
       }
     }
 
-    return NextResponse.json({ slots: slots.slice(0, 20) });
+    const first10 = slots.slice(0, 10);
+
+    return NextResponse.json({
+      available_slots: first10,
+      message: first10.length > 0
+        ? `يوجد ${first10.length} مواعيد متاحة`
+        : "لا توجد مواعيد متاحة هذا الأسبوع",
+    });
   } catch {
     return NextResponse.json({ error: "Failed to fetch slots" }, { status: 500 });
   }
