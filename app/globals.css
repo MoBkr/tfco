@@ -1,0 +1,373 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Root variables ──────────────────────────────── */
+:root {
+  --cyan:   #00D4FF;
+  --purple: #7B2FFF;
+  --gold:   #D4A843;
+  --deep:   #080B14;
+  --surf1:  #0D1220;
+  --surf2:  #141828;
+  --live:   #00E676;
+}
+
+/* ── Base ──────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--deep);
+  color: #F8FAFF;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
+
+/* ── Gradient text ───────────────────────────────── */
+.grad-text {
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.grad-text-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, #F0C566 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Buttons ──────────────────────────────────────── */
+.btn-primary {
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm text-white
+         transition-all duration-200 whitespace-nowrap cursor-pointer;
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(0,212,255,0.4);
+}
+
+.btn-ghost {
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm
+         text-white border transition-all duration-200 whitespace-nowrap cursor-pointer;
+  border-color: rgba(255,255,255,0.15);
+}
+.btn-ghost:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ── Cards ────────────────────────────────────────── */
+.card {
+  background: rgba(13,18,32,0.85);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+.card:hover {
+  border-color: rgba(0,212,255,0.22);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 30px rgba(0,212,255,0.08);
+}
+
+/* ── Glass nav ────────────────────────────────────── */
+.glass-nav {
+  background: rgba(8,11,20,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── Section label ────────────────────────────────── */
+.section-label {
+  @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest;
+  background: rgba(0,212,255,0.08);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 9999px;
+  padding: 0.3rem 0.9rem;
+  color: var(--cyan);
+}
+
+/* ── Terminal / mockup ────────────────────────────── */
+.terminal {
+  background: rgba(8,11,20,0.97);
+  border: 1px solid rgba(0,212,255,0.18);
+  border-radius: 16px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,212,255,0.06);
+}
+
+/* ── Hero mesh bg ─────────────────────────────────── */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 50% 50%,  rgba(0,212,255,0.07)  0%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 75% 35%,  rgba(123,47,255,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 65% at 18% 65%,  rgba(0,212,255,0.15)  0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 88% 85%,  rgba(212,168,67,0.09) 0%, transparent 60%),
+    #080B14;
+  animation: heroPulse 10s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 10%, transparent 100%);
+}
+
+.hero-glow {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle,
+    rgba(0,212,255,0.07) 0%,
+    rgba(123,47,255,0.05) 45%,
+    transparent 70%);
+  pointer-events: none;
+  animation: glowPulse 5s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes glowPulse {
+  0%   { transform: translate(-50%, -50%) scale(1);    opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.18); opacity: 1;   }
+}
+
+/* ── Pulse dot ────────────────────────────────────── */
+@keyframes pulseDot {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,230,118,0.5); }
+  50%     { box-shadow: 0 0 0 7px rgba(0,230,118,0); }
+}
+.pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+
+/* ── Type lines ───────────────────────────────────── */
+@keyframes typeIn {
+  0%   { width: 0; opacity: 0; }
+  1%   { opacity: 1; }
+  100% { width: 100%; opacity: 1; }
+}
+.type-line {
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  display: inline-block;
+}
+.type-line.t1 { animation: typeIn 1.4s steps(28) 0.5s forwards; }
+.type-line.t2 { animation: typeIn 1.4s steps(28) 2.2s forwards; }
+.type-line.t3 { animation: typeIn 1.2s steps(24) 3.9s forwards; }
+.type-line.t4 { animation: typeIn 1.2s steps(24) 5.4s forwards; }
+
+@keyframes blinkCursor {
+  0%,49%  { opacity: 1; }
+  50%,100%{ opacity: 0; }
+}
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 0.9em;
+  background: var(--cyan);
+  animation: blinkCursor 1s step-end infinite;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+}
+
+/* ── Marquee ──────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 24s linear infinite; }
+.marquee-track:hover { animation-play-state: paused; }
+
+/* ── Workflow SVG ─────────────────────────────────── */
+@keyframes flowDash {
+  to { stroke-dashoffset: -20; }
+}
+.flow-line {
+  stroke-dasharray: 6 4;
+  animation: flowDash 1.5s linear infinite;
+}
+
+/* ── Demo tab ─────────────────────────────────────── */
+.demo-tab {
+  @apply px-5 py-2 rounded-full font-semibold text-sm cursor-pointer transition-all duration-200;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #8892A4;
+}
+.demo-tab.active {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border-color: transparent;
+  color: white;
+}
+
+/* ── FAQ ──────────────────────────────────────────── */
+.faq-content {
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+}
+.faq-content.open {
+  max-height: 300px;
+  opacity: 1;
+}
+
+/* ── CS card ──────────────────────────────────────── */
+.cs-card {
+  background: var(--surf1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.cs-card:hover {
+  border-color: rgba(0,212,255,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+/* ── Pricing card ─────────────────────────────────── */
+.pricing-card {
+  background: var(--surf1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+.pricing-card.featured {
+  border-color: rgba(0,212,255,0.3);
+  background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(123,47,255,0.05));
+  box-shadow: 0 0 40px rgba(0,212,255,0.07);
+}
+
+/* ── Float buttons ────────────────────────────────── */
+.float-btn {
+  position: fixed;
+  z-index: 50;
+  border-radius: 9999px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.float-btn:hover { transform: scale(1.1); }
+
+/* ── Testimonial ──────────────────────────────────── */
+.testimonial-card {
+  background: var(--surf1);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+.testimonial-card:hover {
+  border-color: rgba(0,212,255,0.15);
+}
+
+/* ── HeroPulse keyframe (also in tailwind config) ─── */
+@keyframes heroPulse {
+  0%   { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+/* ── Hero large orbital animation ────────────────── */
+@keyframes heroOrbit1 {
+  from { transform: rotate(0deg)   translateX(150px); }
+  to   { transform: rotate(360deg) translateX(150px); }
+}
+@keyframes heroOrbit2 {
+  from { transform: rotate(60deg)  translateX(130px); }
+  to   { transform: rotate(420deg) translateX(130px); }
+}
+@keyframes heroOrbit3 {
+  from { transform: rotate(180deg) translateX(110px); }
+  to   { transform: rotate(540deg) translateX(110px); }
+}
+
+/* ── Logo orbital animation ───────────────────────── */
+@keyframes navOrbit1 {
+  from { transform: rotate(0deg)   translateX(34px); }
+  to   { transform: rotate(360deg) translateX(34px); }
+}
+@keyframes navOrbit2 {
+  from { transform: rotate(90deg)  translateX(41px); }
+  to   { transform: rotate(450deg) translateX(41px); }
+}
+@keyframes iconGlow {
+  0%,100% { opacity: 0.88; }
+  50%     { opacity: 1; }
+}
+
+/* ── Badge float wave ─────────────────────────────── */
+@keyframes floatBadge {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-5px); }
+}
+
+/* ── RTL / LTR utilities ─────────────────────────── */
+[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+[dir="ltr"] .ltr-flip { transform: scaleX(-1); }
+
+/* ── Mobile: disable heavy animations ────────────── */
+@media (max-width: 767px) {
+  /* Kill orbital dots — most expensive: concurrent rotate+translateX */
+  .hero-orbit-dot,
+  .nav-orbit-dot { display: none !important; }
+
+  /* Kill glow pulse scale — forces composite layer recalc */
+  .hero-glow { animation: none !important; }
+
+  /* Kill hero-bg pulse — still fine with static gradient */
+  .hero-bg { animation: none !important; }
+
+  /* Replace box-shadow pulse with simple opacity — GPU composited */
+  @keyframes pulseDot {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  /* Show typewriter lines instantly — width animation = layout reflow */
+  .type-line, .type-line.t1, .type-line.t2, .type-line.t3, .type-line.t4 {
+    animation: none !important;
+    width: 100% !important;
+    opacity: 1 !important;
+  }
+
+  /* Pause marquee on mobile to avoid constant translateX recalc */
+  .marquee-track { animation-play-state: paused !important; }
+
+  /* Remove nav orbital dots too */
+  [style*="navOrbit"] { animation: none !important; }
+}
+
+/* ── ElevenLabs widget — force bottom-left ────────── */
+elevenlabs-convai {
+  position: fixed !important;
+  bottom: 1.5rem !important;
+  left: 1.5rem !important;
+  right: auto !important;
+  inset-inline-start: 1.5rem !important;
+  inset-inline-end: auto !important;
+  z-index: 49 !important;
+}

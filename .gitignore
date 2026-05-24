@@ -1,0 +1,38 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+.next/
+dist/
+build/
+*.zip
+out/
+
+# OS
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.eslintcache
+.vercel
+.env*.local
+.firecrawl/

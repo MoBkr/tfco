@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مخطط سير العمل — سمنان القابضة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #111318;
+      border: 1px solid #1e2535;
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 13px;
+      font-weight: 800;
+      color: #00d4ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0.8;
+    }
+
+    .lock-icon {
+      font-size: 44px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 12px rgba(0,212,255,0.3));
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #e8eaf0;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6a7490;
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    .input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      background: #0d1018;
+      border: 1.5px solid #1e2535;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #e8eaf0;
+      text-align: center;
+      letter-spacing: 8px;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-text-security: disc;
+    }
+
+    input:focus {
+      border-color: #00d4ff;
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+    }
+
+    input.error {
+      border-color: #ff5050;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+
+    .error-msg {
+      font-size: 12px;
+      color: #ff6060;
+      margin-bottom: 12px;
+      min-height: 18px;
+      transition: opacity 0.2s;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #00d4ff, #7b2fff);
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    button:hover  { opacity: 0.9; transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    .footer-note {
+      margin-top: 28px;
+      font-size: 11px;
+      color: #3a4560;
+      line-height: 1.6;
+    }
+
+    .footer-note span { color: #00d4ff; opacity: 0.7; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">ThakaaFlow · ذكاء فلو</div>
+    <div class="lock-icon">🔐</div>
+    <h1>مخطط سير العمل<br>مجموعة سمنان القابضة</h1>
+    <p class="subtitle">أدخل الرمز للوصول إلى المخطط التفاعلي</p>
+
+    <div class="input-wrap">
+      <input
+        id="pin"
+        type="password"
+        inputmode="numeric"
+        maxlength="4"
+        placeholder="• • • •"
+        autocomplete="off"
+        autofocus
+      />
+    </div>
+
+    <div class="error-msg" id="err"></div>
+
+    <button onclick="check()">فتح المخطط</button>
+
+    <p class="footer-note">
+      المخطط خاص ومعد خصيصاً لـ <span>مجموعة سمنان القابضة</span><br>
+      يمكنك إضافة ملاحظاتك وتعديلاتك مباشرة داخله
+    </p>
+  </div>
+
+  <script>
+    const TARGET = '/samnan-flow.html';
+    const PIN    = '4321';
+
+    const inp = document.getElementById('pin');
+    const err = document.getElementById('err');
+
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') check();
+    });
+
+    inp.addEventListener('input', () => {
+      inp.classList.remove('error');
+      err.textContent = '';
+    });
+
+    function check() {
+      if (inp.value.trim() === PIN) {
+        window.location.href = TARGET;
+      } else {
+        inp.classList.add('error');
+        err.textContent = 'رمز غير صحيح، حاول مرة أخرى';
+        inp.value = '';
+        setTimeout(() => inp.classList.remove('error'), 400);
+      }
+    }
+  </script>
+
+</body>
+</html>

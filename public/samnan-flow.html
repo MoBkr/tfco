@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مخطط سير العمل — سمنان القابضة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      min-height: 100vh;
+      padding: 40px 24px;
+    }
+
+    /* ── Header ── */
+    .header { text-align: center; margin-bottom: 48px; }
+    .header .badge {
+      display: inline-block;
+      background: rgba(0,212,255,0.1);
+      border: 1px solid rgba(0,212,255,0.3);
+      color: #00d4ff;
+      font-size: 13px; font-weight: 700;
+      padding: 6px 18px; border-radius: 20px;
+      letter-spacing: 0.5px; margin-bottom: 16px;
+    }
+    .header h1 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .header p  { color: #8892a4; font-size: 15px; }
+
+    /* ── Scope note ── */
+    .scope-note {
+      max-width: 700px; margin: 0 auto 40px;
+      background: rgba(123,47,255,0.08);
+      border: 1px solid rgba(123,47,255,0.25);
+      border-radius: 12px; padding: 16px 20px;
+      font-size: 14px; color: #b8a0ff; text-align: center;
+    }
+
+    /* ── Swimlane ── */
+    .swimlane-container { max-width: 1040px; margin: 0 auto; }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 0; margin-bottom: 4px;
+    }
+    .lane-label {
+      display: flex; align-items: center; justify-content: center;
+      background: #1a1f2e; border: 1px solid #2a3040;
+      border-radius: 12px 0 0 12px;
+      padding: 14px 10px; text-align: center;
+      font-size: 12px; font-weight: 700; color: #8892a4;
+      min-height: 80px;
+    }
+    .lane-label .icon { font-size: 20px; margin-bottom: 5px; display: block; }
+    .lane-content {
+      background: #141820; border: 1px solid #1e2535;
+      border-right: 0; border-radius: 0 12px 12px 0;
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+
+    /* ── Step box ── */
+    .step {
+      background: #1a2030; border: 1.5px solid #2a3555;
+      border-radius: 10px; padding: 11px 14px;
+      min-width: 138px; max-width: 175px;
+      transition: transform 0.15s;
+    }
+    .step:hover { transform: translateY(-2px); }
+    .step.cyan   { border-color: rgba(0,212,255,0.45); }
+    .step.purple { border-color: rgba(123,47,255,0.45); }
+    .step.green  { border-color: rgba(0,200,130,0.45); }
+    .step.orange { border-color: rgba(255,160,50,0.45); }
+    .step.red    { border-color: rgba(255,80,80,0.45); }
+
+    .step-num {
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      margin-bottom: 5px; opacity: 0.65;
+    }
+    .step.cyan   .step-num { color: #00d4ff; }
+    .step.purple .step-num { color: #a060ff; }
+    .step.green  .step-num { color: #00c882; }
+    .step.orange .step-num { color: #ffa032; }
+    .step.red    .step-num { color: #ff5050; }
+
+    .step-title { font-size: 13px; font-weight: 700; color: #e8eaf0; line-height: 1.4; }
+    .step-sub   { font-size: 11px; color: #6a7490; margin-top: 3px; line-height: 1.4; }
+
+    /* date tag */
+    .step-date {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 6px;
+      background: rgba(255,160,50,0.08);
+      border: 1px solid rgba(255,160,50,0.2);
+      border-radius: 6px; padding: 2px 7px;
+      font-size: 10px; color: #ffa032; font-weight: 600;
+    }
+
+    /* Arrow */
+    .arrow { color: #3a4560; font-size: 20px; flex-shrink: 0; user-select: none; }
+
+    /* ── Decision block ── */
+    .decision-block {
+      background: #1a2030;
+      border: 2px dashed rgba(255,160,50,0.5);
+      border-radius: 10px; padding: 11px 14px;
+      min-width: 155px; max-width: 190px;
+      position: relative;
+    }
+    .decision-tag {
+      display: inline-block;
+      background: rgba(255,160,50,0.12);
+      border: 1px solid rgba(255,160,50,0.3);
+      color: #ffa032; font-size: 10px; font-weight: 800;
+      padding: 2px 8px; border-radius: 6px;
+      margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+    .decision-q { font-size: 12px; font-weight: 700; color: #e8eaf0; line-height: 1.4; }
+    .decision-paths { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .path {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 11px; line-height: 1.4;
+    }
+    .path-yes { color: #00c882; }
+    .path-no  { color: #ff6060; }
+    .path-badge {
+      font-size: 10px; font-weight: 800; padding: 1px 6px;
+      border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+    }
+    .path-yes .path-badge { background: rgba(0,200,130,0.15); color: #00c882; }
+    .path-no  .path-badge { background: rgba(255,80,80,0.15);  color: #ff6060; }
+
+    /* ── Exception box ── */
+    .exception-lane {
+      max-width: 1040px; margin: 6px auto;
+      background: rgba(255,80,80,0.04);
+      border: 1px dashed rgba(255,80,80,0.2);
+      border-radius: 10px; padding: 12px 18px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .exc-label {
+      font-size: 11px; font-weight: 800; color: #ff6060;
+      letter-spacing: 1px; flex-shrink: 0;
+    }
+    .exc-item {
+      background: #1a2030; border: 1px solid rgba(255,80,80,0.3);
+      border-radius: 8px; padding: 8px 12px;
+      font-size: 12px; color: #e8eaf0;
+    }
+    .exc-item span { color: #ff6060; font-weight: 700; }
+
+    /* ── Phase divider ── */
+    .phase-divider {
+      max-width: 1040px; margin: 24px auto 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .phase-divider hr { flex: 1; border: none; border-top: 1px dashed #2a3040; }
+    .phase-label {
+      font-size: 11px; font-weight: 800; letter-spacing: 2px;
+      color: #3a4560; white-space: nowrap;
+    }
+
+    /* ── Dashboard ── */
+    .dashboard-section { max-width: 1040px; margin: 40px auto 0; }
+    .dashboard-title {
+      font-size: 16px; font-weight: 700; color: #00d4ff;
+      margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 12px;
+    }
+    .dash-card {
+      background: #141820; border: 1px solid #1e2535;
+      border-radius: 12px; padding: 16px 18px;
+    }
+    .dash-card-icon { font-size: 22px; margin-bottom: 8px; }
+    .dash-card-label { font-size: 12px; color: #6a7490; margin-bottom: 4px; }
+    .dash-card-value { font-size: 13px; font-weight: 700; color: #e8eaf0; }
+    .dash-card.alert { border-color: rgba(255,160,50,0.3); background: rgba(255,160,50,0.04); }
+    .dash-card.alert .dash-card-label { color: #ffa032; }
+
+    /* ── Legend ── */
+    .legend {
+      max-width: 1040px; margin: 32px auto 0;
+      display: flex; gap: 20px; flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #6a7490; }
+    .legend-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-dash {
+      width: 18px; height: 0; border-top: 2px dashed rgba(255,160,50,0.6); flex-shrink: 0;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      max-width: 1040px; margin: 40px auto 0;
+      text-align: center; font-size: 12px; color: #3a4560;
+    }
+    .footer span { color: #00d4ff; }
+    .version-badge {
+      display: inline-block; margin-top: 8px;
+      background: rgba(0,200,130,0.08); border: 1px solid rgba(0,200,130,0.2);
+      color: #00c882; font-size: 11px; padding: 3px 12px; border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">مخطط سير العمل — نسخة ٣ (مُحدَّثة)</div>
+    <h1>دورة حياة المشروع الداخلية</h1>
+    <p>مجموعة سمنان القابضة · اجتماع 10 مايو 2026</p>
+  </div>
+
+  <!-- Scope note -->
+  <div class="scope-note">
+    📌 النطاق المتفق عليه: يبدأ المخطط <strong>بعد توقيع العقد</strong> — مرحلة المبيعات والتسعير خارج النطاق الآن
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PHASE 1 — العقد والتهيئة
+  ══════════════════════════════════════════════════ -->
+  <div class="phase-divider">
+    <hr/><div class="phase-label">المرحلة ١ — العقد والتهيئة</div><hr/>
+  </div>
+
+  <div class="swimlane-container">
+
+    <div class="lane">
+      <div class="lane-label"><div class="icon">📋</div>الكوردنيتر</div>
+      <div class="lane-content">
+        <div class="step cyan">
+          <div class="step-num">01</div>
+          <div class="step-title">استلام العقد الموقّع</div>
+          <div class="step-sub">يُرفع العقد على النظام كـ PDF</div>
+        </div>
+        <div class="arrow">←</div>
+        <div class="step cyan">
+          <div class="step-num">02</div>
+          <div class="step-title">تسجيل شروط السداد</div>
+          <div class="step-sub">٪ دفعة أولى · توريد · تركيب · نهائية</div>
+          <div class="step-date">📅 الموعد المتوقع لكل دفعة</div>
+        </div>
+        <div class="arrow">←</div>
+        <div class="step cyan">
+          <div class="step-num">03</div>
+          <div class="step-title">إنشاء ملف المشروع</div>
+          <div class="step-sub">اسم العميل · المشروع · المواعيد الإجمالية</div>
+          <div class="step-date">📅 تاريخ الاستحقاق الكلي</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">👷</div>مهندس المبيعات</div>
+      <div class="lane-content">
+        <div class="step purple">
+          <div class="step-num">04</div>
+          <div class="step-title">إرسال طلب الدفعة الأولى</div>
+          <div class="step-sub">إشعار تلقائي للعميل عبر واتساب/بريد</div>
+          <div class="step-date">📅 موعد الاستحقاق المسجَّل</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PHASE 2 — الدفعة الأولى وتجهيز المواد
+  ══════════════════════════════════════════════════ -->
+  <div class="phase-divider">
+    <hr/><div class="phase-label">المرحلة ٢ — الدفعة الأولى وتجهيز المواد</div><hr/>
+  </div>
+
+  <div class="swimlane-container">
+
+    <div class="lane">
+      <div class="lane-label"><div class="icon">💰</div>التحصيل</div>
+      <div class="lane-content">
+
+        <!-- Decision: هل دفع العميل؟ -->
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل سدّد العميل الدفعة الأولى؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes">
+              <span class="path-badge">نعم</span>
+              رفع الحوالة ← المتابعة
+            </div>
+            <div class="path path-no">
+              <span class="path-badge">لا</span>
+              تنبيه تلقائي بعد X يوم ← تصعيد لمهندس المبيعات
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+        <div class="step green">
+          <div class="step-num">05</div>
+          <div class="step-title">تسجيل الدفعة الأولى</div>
+          <div class="step-sub">رفع صورة الحوالة + ضغط "تم التحصيل"</div>
+        </div>
+        <div class="arrow">←</div>
+        <div class="step green">
+          <div class="step-num">06</div>
+          <div class="step-title">إصدار الفاتورة</div>
+          <div class="step-sub">تُسحب من SAP وتُرفق تلقائياً</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- استثناء: العميل لم يدفع -->
+    <div class="exception-lane">
+      <span class="exc-label">⚠ مسار الاستثناء — عدم السداد</span>
+      <div class="exc-item">بعد <span>3 أيام</span>: تنبيه تلقائي → مهندس المبيعات يتصل بالعميل مباشرة</div>
+      <div class="exc-item">مهندس المبيعات يُوثّق <span>رد العميل</span> في النظام (وعد بالسداد / نزاع / لا رد)</div>
+      <div class="exc-item">بعد <span>7 أيام</span>: تصعيد للإدارة + ملاحظة حمراء على الداشبورد</div>
+      <div class="exc-item">تعديل <span>الموعد المتوقع</span> يدوياً وفق رد العميل</div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">📋</div>الكوردنيتر</div>
+      <div class="lane-content">
+        <div class="step cyan">
+          <div class="step-num">07</div>
+          <div class="step-title">تجهيز قائمة المواد</div>
+          <div class="step-sub">إدخال طلب المواد في SAP</div>
+          <div class="step-date">📅 موعد جاهزية المواد</div>
+        </div>
+        <div class="arrow">←</div>
+        <div class="step cyan">
+          <div class="step-num">08</div>
+          <div class="step-title">تتبع حالة التجهيز</div>
+          <div class="step-sub">قيد التجهيز / جاهز / محجوز</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PHASE 3 — التوريد
+  ══════════════════════════════════════════════════ -->
+  <div class="phase-divider">
+    <hr/><div class="phase-label">المرحلة ٣ — التوريد</div><hr/>
+  </div>
+
+  <div class="swimlane-container">
+
+    <div class="lane">
+      <div class="lane-label"><div class="icon">📦</div>الكوردنيتر</div>
+      <div class="lane-content">
+        <div class="step orange">
+          <div class="step-num">09</div>
+          <div class="step-title">تحديد موعد التوريد</div>
+          <div class="step-sub">إشعار مهندس المبيعات + العميل</div>
+          <div class="step-date">📅 الموعد المقترح</div>
+        </div>
+
+        <div class="arrow">←</div>
+
+        <!-- Decision: تأكيد العميل -->
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل أكّد العميل استلام الموعد؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes">
+              <span class="path-badge">نعم</span>
+              المتابعة للتوريد
+            </div>
+            <div class="path path-no">
+              <span class="path-badge">لا</span>
+              إعادة تحديد موعد بديل
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+
+        <!-- Decision: مشكلة في التوريد؟ -->
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل تم التوريد بدون مشاكل؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes">
+              <span class="path-badge">نعم</span>
+              تحديث الحالة: تم التوريد ✓
+            </div>
+            <div class="path path-no">
+              <span class="path-badge">لا</span>
+              تسجيل المشكلة + تصعيد للإدارة
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+        <div class="step orange">
+          <div class="step-num">10</div>
+          <div class="step-title">تأكيد اكتمال التوريد</div>
+          <div class="step-sub">رفع صورة محضر الاستلام إن وجد</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- استثناء: مشكلة في التوريد -->
+    <div class="exception-lane">
+      <span class="exc-label">⚠ مسار الاستثناء</span>
+      <div class="exc-item">نقص مواد: <span>إعادة الطلب من SAP</span> + تحديث موعد التركيب</div>
+      <div class="exc-item">تأخير توريد: <span>تنبيه الإدارة</span> + إشعار العميل عبر مهندس المبيعات</div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">👷</div>مهندس المبيعات</div>
+      <div class="lane-content">
+        <div class="step purple">
+          <div class="step-num">11</div>
+          <div class="step-title">إرسال طلب دفعة التوريد</div>
+          <div class="step-sub">وفق شروط العقد المسجلة</div>
+          <div class="step-date">📅 موعد الاستحقاق</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">💰</div>التحصيل</div>
+      <div class="lane-content">
+
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل سدّد العميل دفعة التوريد؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes"><span class="path-badge">نعم</span> رفع الحوالة ← إصدار فاتورة SAP</div>
+            <div class="path path-no"><span class="path-badge">لا</span> تنبيه تلقائي + تصعيد</div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+        <div class="step green">
+          <div class="step-num">12</div>
+          <div class="step-title">تحصيل دفعة التوريد</div>
+          <div class="step-sub">رفع الحوالة + إصدار فاتورة SAP</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PHASE 4 — التركيب
+  ══════════════════════════════════════════════════ -->
+  <div class="phase-divider">
+    <hr/><div class="phase-label">المرحلة ٤ — التركيب والإغلاق</div><hr/>
+  </div>
+
+  <div class="swimlane-container">
+
+    <div class="lane">
+      <div class="lane-label"><div class="icon">🔧</div>قسم التركيبات</div>
+      <div class="lane-content">
+        <div class="step red">
+          <div class="step-num">13</div>
+          <div class="step-title">تنسيق موعد التركيب</div>
+          <div class="step-sub">الكوردنيتر يقترح الموعد للعميل + قسم التركيبات</div>
+          <div class="step-date">📅 الموعد المقترح</div>
+        </div>
+        <div class="arrow">←</div>
+
+        <!-- Decision: توافر قسم التركيبات -->
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل أكّد قسم التركيبات التوافر في الموعد؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes">
+              <span class="path-badge">نعم</span>
+              تأكيد الموعد للعميل ← المتابعة
+            </div>
+            <div class="path path-no">
+              <span class="path-badge">لا</span>
+              إعادة تحديد موعد بديل + إشعار العميل
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+        <div class="step red">
+          <div class="step-num">14</div>
+          <div class="step-title">تنفيذ التركيب</div>
+          <div class="step-sub">تحديث الحالة: تم التركيب ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- استثناء: تأخير التركيب -->
+    <div class="exception-lane">
+      <span class="exc-label">⚠ مسار الاستثناء — تأخير التركيب</span>
+      <div class="exc-item">قسم التركيبات غير متاح: <span>تحديد موعد بديل</span> + إشعار العميل فوراً</div>
+      <div class="exc-item">تأخير 3+ أيام: <span>تصعيد لمدير المشروع</span> + ملاحظة على الداشبورد</div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">👷</div>مهندس المبيعات</div>
+      <div class="lane-content">
+        <div class="step purple">
+          <div class="step-num">15</div>
+          <div class="step-title">إرسال طلب الدفعة الأخيرة</div>
+          <div class="step-sub">وفق شروط العقد المسجلة</div>
+          <div class="step-date">📅 موعد الاستحقاق</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lane" style="margin-top:4px;">
+      <div class="lane-label"><div class="icon">💰</div>التحصيل</div>
+      <div class="lane-content">
+
+        <div class="decision-block">
+          <div class="decision-tag">نقطة قرار</div>
+          <div class="decision-q">هل سدّد العميل الدفعة الأخيرة؟</div>
+          <div class="decision-paths">
+            <div class="path path-yes"><span class="path-badge">نعم</span> إغلاق المشروع ✓</div>
+            <div class="path path-no"><span class="path-badge">لا</span> تنبيه + تسجيل متأخرات</div>
+          </div>
+        </div>
+
+        <div class="arrow">←</div>
+        <div class="step green">
+          <div class="step-num">16</div>
+          <div class="step-title">تحصيل الدفعة الأخيرة</div>
+          <div class="step-sub">رفع الحوالة + إصدار فاتورة SAP</div>
+        </div>
+        <div class="arrow">←</div>
+        <div class="step green" style="border-color: rgba(0,200,130,0.9); background: rgba(0,200,130,0.06);">
+          <div class="step-num">17</div>
+          <div class="step-title">✓ إغلاق المشروع</div>
+          <div class="step-sub">الحالة: مكتمل · أرشفة جميع المستندات</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       Dashboard
+  ══════════════════════════════════════════════════ -->
+  <div class="dashboard-section">
+    <div class="dashboard-title">📊 لوحة الإدارة (الداشبورد)</div>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-card-icon">📁</div>
+        <div class="dash-card-label">المشاريع النشطة</div>
+        <div class="dash-card-value">المرحلة الحالية + المالك</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-icon">💳</div>
+        <div class="dash-card-label">حالة الدفعات</div>
+        <div class="dash-card-value">مكتملة · قيد الانتظار · متأخرة</div>
+      </div>
+      <div class="dash-card alert">
+        <div class="dash-card-icon">⏰</div>
+        <div class="dash-card-label">مواعيد متجاوَزة</div>
+        <div class="dash-card-value">تنبيه تلقائي حين يتجاوز الموعد المتوقع</div>
+      </div>
+      <div class="dash-card alert">
+        <div class="dash-card-icon">⚠️</div>
+        <div class="dash-card-label">مشاكل مُسجَّلة</div>
+        <div class="dash-card-value">تأخيرات · نقص مواد · متأخرات تحصيل</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-icon">📎</div>
+        <div class="dash-card-label">المستندات</div>
+        <div class="dash-card-value">العقود · الفواتير · الحوالات · PDF</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-icon">🔗</div>
+        <div class="dash-card-label">ربط مستقبلي</div>
+        <div class="dash-card-value">SAP · بيانات التسعير التاريخية</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#00d4ff;"></div> الكوردنيتر</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a060ff;"></div> مهندس المبيعات</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00c882;"></div> التحصيل</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffa032;"></div> التوريد</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff5050;"></div> التركيب</div>
+    <div class="legend-item"><div class="legend-dash"></div> قرار / استثناء</div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    أُعدّ بواسطة <span>ذكاء فلو</span> · 10 مايو 2026
+    <div class="version-badge">v3 — يشمل نقاط القرار والمواعيد والاستثناءات وحلقة مهندس المبيعات</div>
+  </div>
+
+</body>
+</html>
