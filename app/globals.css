@@ -21,7 +21,6 @@ html { scroll-behavior: smooth; }
 body {
   background-color: var(--deep);
   color: #F8FAFF;
-  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar { width: 4px; }

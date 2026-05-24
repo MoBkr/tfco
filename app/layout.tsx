@@ -75,9 +75,12 @@ Cal.ns["جلسة-استشارية"]("ui", {"hideEventTypeDetails":false,"layout"
       </head>
       <body
         className="font-tajawal antialiased"
-        style={{ backgroundColor: "#080B14", color: "#F8FAFF", overflowX: "hidden" }}
+        style={{ backgroundColor: "#080B14", color: "#F8FAFF" }}
       >
-        <LangProvider>{children}</LangProvider>
+        {/* overflow-x on wrapper so fixed widgets aren't clipped */}
+        <div style={{ overflowX: "hidden" }}>
+          <LangProvider>{children}</LangProvider>
+        </div>
         <elevenlabs-convai agent-id="agent_5201kse07m9nehpta0e063w3hxg0"></elevenlabs-convai>
         <Script src="https://unpkg.com/@elevenlabs/convai-widget-embed" strategy="afterInteractive" />
       </body>
