@@ -432,3 +432,119 @@ body {
   [style*="navOrbit"] { animation: none !important; }
 }
 
+/* ═══════════════════════════════════════════════════
+   CREATIVE EFFECTS — Premium AI Company Feel
+   ═══════════════════════════════════════════════════ */
+
+/* ── Stat card shimmer on visible ────────────────── */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(0,212,255,0.06) 50%, transparent 60%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Animated gradient border on featured card ───── */
+@keyframes borderSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.card-gradient-border {
+  position: relative;
+  isolation: isolate;
+}
+.card-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0,212,255,0.6),
+    rgba(123,47,255,0.6),
+    rgba(212,168,67,0.4),
+    rgba(0,212,255,0.6)
+  );
+  animation: borderSpin 4s linear infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card-gradient-border:hover::before { opacity: 1; }
+
+/* ── Glowing section headings ────────────────────── */
+.glow-heading {
+  text-shadow:
+    0 0 40px rgba(0,212,255,0.15),
+    0 0 80px rgba(123,47,255,0.08);
+}
+
+/* ── Aurora animated hero background ────────────── */
+@keyframes auroraShift {
+  0%   { opacity: 0.8; filter: hue-rotate(0deg); }
+  33%  { opacity: 1;   filter: hue-rotate(15deg); }
+  66%  { opacity: 0.9; filter: hue-rotate(-10deg); }
+  100% { opacity: 0.8; filter: hue-rotate(0deg); }
+}
+.hero-glow {
+  animation: glowPulse 5s ease-in-out infinite alternate, auroraShift 12s ease-in-out infinite;
+  will-change: transform, opacity, filter;
+}
+
+/* ── Neon underline on nav links ─────────────────── */
+nav a {
+  position: relative;
+}
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  transition: left 0.25s ease, right 0.25s ease;
+  border-radius: 1px;
+}
+nav a:hover::after {
+  left: 12px;
+  right: 12px;
+}
+
+/* ── Pricing featured card — animated glow ───────── */
+.pricing-card.featured {
+  animation: featuredPulse 4s ease-in-out infinite;
+}
+@keyframes featuredPulse {
+  0%,100% { box-shadow: 0 0 40px rgba(0,212,255,0.07); }
+  50%      { box-shadow: 0 0 60px rgba(0,212,255,0.15), 0 0 80px rgba(123,47,255,0.08); }
+}
+
+/* ── Section divider gradient ────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,255,0.2), rgba(123,47,255,0.2), transparent);
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+/* ── Floating badge glow ─────────────────────────── */
+.badge-glow {
+  box-shadow: 0 0 12px rgba(0,212,255,0.12);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.badge-glow:hover {
+  box-shadow: 0 0 20px rgba(0,212,255,0.25);
+  transform: translateY(-2px);
+}

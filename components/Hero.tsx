@@ -1,11 +1,13 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ChevronDown, Bot, FileSearch, Brain, Workflow, Globe } from "lucide-react";
 import { useLang } from "@/lib/LangContext";
 import { t } from "@/lib/translations";
 import { openCal } from "@/lib/openCal";
+import { useInView } from "@/lib/useInView";
+import { useCountUp } from "@/lib/useCountUp";
 
 function initParticles(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d")!;
@@ -80,8 +82,15 @@ export default function Hero() {
   const { lang } = useLang();
   const tx = t[lang].hero;
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const badges = lang === "ar" ? BADGES_AR : BADGES_EN;
   const isRTL = lang === "ar";
+
+  const [statsRef, statsVisible] = useInView();
+  const c1 = useCountUp(24, 1600, statsVisible);
+  const c2 = useCountUp(4,  1600, statsVisible);
+  const c3 = useCountUp(3,  1600, statsVisible);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -89,11 +98,35 @@ export default function Hero() {
     return initParticles(canvasRef.current);
   }, []);
 
+  const onMouseMove = useCallback((e: MouseEvent) => {
+    const rect = heroRef.current?.getBoundingClientRect();
+    const el = spotlightRef.current;
+    if (!rect || !el) return;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    el.style.background = `radial-gradient(700px circle at ${x}px ${y}px, rgba(0,212,255,0.08), rgba(123,47,255,0.04) 40%, transparent 65%)`;
+  }, []);
+
+  useEffect(() => {
+    const el = heroRef.current;
+    el?.addEventListener("mousemove", onMouseMove, { passive: true });
+    return () => el?.removeEventListener("mousemove", onMouseMove);
+  }, [onMouseMove]);
+
+  const statDisplay = [
+    lang === "ar" ? `${c1}/٧` : `${c1}/7`,
+    lang === "ar" ? `٢–${c2} أسابيع` : `2–${c2} Wks`,
+    lang === "ar" ? `${c3} أشهر` : `${c3} Months`,
+    tx.stat4v,
+  ];
+
   return (
-    <section id="hero" className="relative flex items-center justify-center pt-16 min-h-svh overflow-hidden">
+    <section ref={heroRef} id="hero" className="relative flex items-center justify-center pt-16 min-h-svh overflow-hidden">
       <div className="hero-bg" />
       <div className="hero-grid" />
       <div className="hero-glow" />
+      {/* Mouse spotlight */}
+      <div ref={spotlightRef} className="absolute inset-0 pointer-events-none z-10 hidden md:block transition-none" />
       <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-40 hidden md:block" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full py-20 lg:py-24">
@@ -266,22 +299,23 @@ export default function Hero() {
 
             {/* Stats */}
             <motion.div
+              ref={statsRef as React.RefObject<HTMLDivElement>}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85, duration: 0.6 }}
               className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl mb-10"
             >
               {[
-                { v: tx.stat1v, l: tx.stat1l, c: "grad-text" },
-                { v: tx.stat2v, l: tx.stat2l, c: "grad-text" },
-                { v: tx.stat3v, l: tx.stat3l, c: "text-gold" },
-                { v: tx.stat4v, l: tx.stat4l, c: "text-white" },
+                { v: statDisplay[0], l: tx.stat1l, c: "grad-text" },
+                { v: statDisplay[1], l: tx.stat2l, c: "grad-text" },
+                { v: statDisplay[2], l: tx.stat3l, c: "text-gold" },
+                { v: statDisplay[3], l: tx.stat4l, c: "text-white" },
               ].map((s, i) => (
                 <div
                   key={i}
-                  className="bg-white/[0.04] border border-white/[0.06] rounded-2xl p-3 text-center"
+                  className="stat-card bg-white/[0.04] border border-white/[0.06] rounded-2xl p-3 text-center"
                 >
-                  <div className={`text-xl sm:text-2xl font-black ${s.c}`}>{s.v}</div>
+                  <div className={`text-xl sm:text-2xl font-black tabular-nums ${s.c}`}>{s.v}</div>
                   <div className="text-xs text-gray-400 mt-1 leading-tight">{s.l}</div>
                 </div>
               ))}

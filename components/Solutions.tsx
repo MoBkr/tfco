@@ -53,6 +53,18 @@ export default function Solutions() {
                   {pillar.items.map((item: any, ii: number) => {
                     const Icon = CARD_ICONS[pi]?.[ii] ?? Sparkles;
                     const color = CARD_COLORS[pi]?.[ii] ?? "#00D4FF";
+                    const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+                      const el = e.currentTarget;
+                      const r = el.getBoundingClientRect();
+                      const x = ((e.clientX - r.left) / r.width  - 0.5) * 14;
+                      const y = ((e.clientY - r.top)  / r.height - 0.5) * 14;
+                      el.style.transform = `perspective(700px) rotateX(${-y}deg) rotateY(${x}deg) translateZ(8px)`;
+                      el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.4), 0 0 20px ${color}22`;
+                    };
+                    const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+                      e.currentTarget.style.transform = "";
+                      e.currentTarget.style.boxShadow = "";
+                    };
                     return (
                       <motion.div
                         key={ii}
@@ -60,6 +72,9 @@ export default function Solutions() {
                         animate={visible ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.45, delay: pi * 0.1 + ii * 0.07 }}
                         className="card p-5 group cursor-default"
+                        style={{ transition: "transform 0.15s ease, box-shadow 0.15s ease, border-color 0.3s ease" }}
+                        onMouseMove={handleTilt}
+                        onMouseLeave={resetTilt}
                       >
                         <div
                           className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
