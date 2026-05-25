@@ -37,8 +37,9 @@ export async function POST(req: NextRequest) {
 
     const data = await res.json();
 
-    if (!res.ok) {
-      return NextResponse.json({ error: data?.message ?? "Booking failed" }, { status: res.status });
+    if (!res.ok || data?.status === "error") {
+      const msg = data?.error?.message ?? data?.message ?? "Booking failed";
+      return NextResponse.json({ error: msg }, { status: res.ok ? 400 : res.status });
     }
 
     return NextResponse.json({
@@ -46,8 +47,9 @@ export async function POST(req: NextRequest) {
       bookingId:  data?.data?.id,
       meetingUrl: data?.data?.meetingUrl,
       start:      data?.data?.start,
+      message:    `تم الحجز بنجاح! رابط الاجتماع: ${data?.data?.meetingUrl}`,
     });
-  } catch {
-    return NextResponse.json({ error: "Failed to book" }, { status: 500 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
