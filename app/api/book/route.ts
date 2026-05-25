@@ -5,11 +5,14 @@ const EVENT_TYPE_ID = 5793092;
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, start, timeZone } = await req.json();
+    const body = await req.json();
+    const { name, email, timeZone } = body;
+    // Accept slotTime (ElevenLabs tool param) or start (direct calls)
+    const start: string = body.start ?? body.slotTime ?? "";
 
     if (!name || !email || !start) {
       return NextResponse.json(
-        { error: "name, email, and start are required" },
+        { error: "name, email, and start (or slotTime) are required" },
         { status: 400 }
       );
     }
