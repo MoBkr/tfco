@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Tajawal, Inter } from "next/font/google";
 import Script from "next/script";
 import { LangProvider } from "@/lib/LangContext";
+import { ThemeProvider } from "@/lib/ThemeContext";
 import "./globals.css";
 
 const tajawal = Tajawal({
@@ -42,8 +43,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
+      data-theme="dark"
       className={`${tajawal.variable} ${inter.variable}`}
-      style={{ backgroundColor: "#080B14" }}
     >
       <head>
         <script
@@ -55,13 +56,12 @@ Cal.ns["جلسة-استشارية"]("ui", {"hideEventTypeDetails":false,"layout"
           }}
         />
       </head>
-      <body
-        className="font-tajawal antialiased"
-        style={{ backgroundColor: "#080B14", color: "#F8FAFF" }}
-      >
+      <body className="font-tajawal antialiased">
         {/* overflow-x on wrapper so fixed widgets aren't clipped */}
         <div style={{ overflowX: "hidden" }}>
-          <LangProvider>{children}</LangProvider>
+          <ThemeProvider>
+            <LangProvider>{children}</LangProvider>
+          </ThemeProvider>
         </div>
         <elevenlabs-convai agent-id="agent_6801kse15x6afb3t77e4nrqhvfrb"></elevenlabs-convai>
         <Script src="https://unpkg.com/@elevenlabs/convai-widget-embed" strategy="afterInteractive" />

@@ -1,14 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Menu, X, Bot } from "lucide-react";
+import { Globe, Menu, X, Sun, Moon } from "lucide-react";
 import Image from "next/image";
 import { useLang } from "@/lib/LangContext";
+import { useTheme } from "@/lib/ThemeContext";
 import { t } from "@/lib/translations";
 import { openCal } from "@/lib/openCal";
 
 export default function Navbar() {
   const { lang, toggle } = useLang();
+  const { theme, toggleTheme } = useTheme();
   const tx = t[lang].nav;
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -140,7 +142,7 @@ export default function Navbar() {
           </div>
 
           {/* Right controls */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={toggle}
               aria-label="Toggle language"
@@ -148,6 +150,14 @@ export default function Navbar() {
             >
               <Globe size={12} />
               {tx.langSwitch}
+            </button>
+
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className="flex items-center justify-center w-8 h-8 rounded-full border border-white/10 text-gray-300 hover:border-cyan hover:text-cyan transition-all"
+            >
+              {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
             </button>
 
             <button
