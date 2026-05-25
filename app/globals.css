@@ -99,12 +99,23 @@ body {
 ::-webkit-scrollbar-track { background: var(--deep); }
 ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
 
-/* ── Gradient text ───────────────────────────────── */
+/* ── Hide default cursor on pointer devices ──────── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* ── Gradient text (animated) ────────────────────── */
 .grad-text {
-  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%);
+  background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 40%, var(--cyan) 80%);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradShift 5s linear infinite;
+}
+@keyframes gradShift {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
 }
 
 .grad-text-gold {
@@ -142,6 +153,8 @@ body {
   border-radius: 16px;
   backdrop-filter: blur(12px);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 .card:hover {
   border-color: rgba(0,212,255,0.22);
@@ -537,6 +550,12 @@ nav a:hover::after {
   background: linear-gradient(90deg, transparent, rgba(0,212,255,0.2), rgba(123,47,255,0.2), transparent);
   margin: 0 auto;
   max-width: 600px;
+}
+
+/* ── Zaki mascot pulse rings ─────────────────────── */
+@keyframes zakiPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.45; }
+  50%       { transform: scale(1.07); opacity: 1; }
 }
 
 /* ── Floating badge glow ─────────────────────────── */

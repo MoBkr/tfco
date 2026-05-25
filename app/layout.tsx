@@ -3,6 +3,11 @@ import { Tajawal, Inter } from "next/font/google";
 import Script from "next/script";
 import { LangProvider } from "@/lib/LangContext";
 import { ThemeProvider } from "@/lib/ThemeContext";
+import Cursor         from "@/components/Cursor";
+import ScrollProgress from "@/components/ScrollProgress";
+import NoiseOverlay   from "@/components/NoiseOverlay";
+import CardSpotlight  from "@/components/CardSpotlight";
+import ZakiMascot     from "@/components/ZakiMascot";
 import "./globals.css";
 
 const tajawal = Tajawal({
@@ -57,10 +62,17 @@ Cal.ns["جلسة-استشارية"]("ui", {"hideEventTypeDetails":false,"layout"
         />
       </head>
       <body className="font-tajawal antialiased">
+        <Cursor />
+        <ScrollProgress />
+        <NoiseOverlay />
+        <CardSpotlight />
         {/* overflow-x on wrapper so fixed widgets aren't clipped */}
         <div style={{ overflowX: "hidden" }}>
           <ThemeProvider>
-            <LangProvider>{children}</LangProvider>
+            <LangProvider>
+              {children}
+              <ZakiMascot />
+            </LangProvider>
           </ThemeProvider>
         </div>
         <elevenlabs-convai agent-id="agent_6801kse15x6afb3t77e4nrqhvfrb"></elevenlabs-convai>

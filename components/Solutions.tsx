@@ -49,41 +49,68 @@ export default function Solutions() {
                   <div className="flex-1 h-px" style={{ background: `${pillar.color}20` }} />
                 </div>
 
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Bento grid — items 0 & 3 are wide (zigzag) */}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {pillar.items.map((item: any, ii: number) => {
                     const Icon = CARD_ICONS[pi]?.[ii] ?? Sparkles;
                     const color = CARD_COLORS[pi]?.[ii] ?? "#00D4FF";
-                    const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+                    const isFeatured = ii === 0 || ii === 3;
+
+                    const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
                       const el = e.currentTarget;
                       const r = el.getBoundingClientRect();
-                      const x = ((e.clientX - r.left) / r.width  - 0.5) * 14;
-                      const y = ((e.clientY - r.top)  / r.height - 0.5) * 14;
-                      el.style.transform = `perspective(700px) rotateX(${-y}deg) rotateY(${x}deg) translateZ(8px)`;
-                      el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.4), 0 0 20px ${color}22`;
+                      const x = ((e.clientX - r.left) / r.width  - 0.5) * 16;
+                      const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+                      el.style.transform = `perspective(700px) rotateX(${-y}deg) rotateY(${x}deg) translateZ(10px)`;
+                      el.style.boxShadow = `0 24px 60px rgba(0,0,0,0.5), 0 0 30px ${color}28`;
+                      el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+                      el.style.setProperty("--my", `${e.clientY - r.top}px`);
                     };
-                    const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+
+                    const handleLeave = (e: React.MouseEvent<HTMLDivElement>) => {
                       e.currentTarget.style.transform = "";
                       e.currentTarget.style.boxShadow = "";
+                      e.currentTarget.style.setProperty("--mx", "-9999px");
+                      e.currentTarget.style.setProperty("--my", "-9999px");
                     };
+
                     return (
                       <motion.div
                         key={ii}
                         initial={{ opacity: 0, y: 20 }}
                         animate={visible ? { opacity: 1, y: 0 } : {}}
                         transition={{ duration: 0.45, delay: pi * 0.1 + ii * 0.07 }}
-                        className="card p-5 group cursor-default"
-                        style={{ transition: "transform 0.15s ease, box-shadow 0.15s ease, border-color 0.3s ease" }}
-                        onMouseMove={handleTilt}
-                        onMouseLeave={resetTilt}
+                        className={`card group cursor-default${isFeatured ? " lg:col-span-2" : ""}`}
+                        style={{
+                          padding: isFeatured ? "1.75rem" : "1.25rem",
+                          transition: "transform 0.15s ease, box-shadow 0.15s ease, border-color 0.3s ease",
+                        }}
+                        onMouseMove={handleMove}
+                        onMouseLeave={handleLeave}
                       >
+                        {/* Inner spotlight — follows mouse via CSS vars */}
                         <div
-                          className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
-                          style={{ background: `${color}18`, border: `1px solid ${color}30` }}
-                        >
-                          <Icon size={20} color={color} />
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            borderRadius: "inherit",
+                            background: `radial-gradient(280px circle at var(--mx, -9999px) var(--my, -9999px), ${color}10, transparent 55%)`,
+                          }}
+                        />
+                        {/* Content — above spotlight by DOM order */}
+                        <div className="relative">
+                          <div
+                            className={`${isFeatured ? "w-12 h-12 mb-5" : "w-10 h-10 mb-4"} rounded-xl flex items-center justify-center transition-transform group-hover:scale-110`}
+                            style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+                          >
+                            <Icon size={isFeatured ? 22 : 20} color={color} />
+                          </div>
+                          <h4 className={`font-bold text-white mb-2 ${isFeatured ? "text-base" : "text-sm"} leading-snug`}>
+                            {item.title}
+                          </h4>
+                          <p className={`text-gray-400 ${isFeatured ? "text-sm" : "text-xs"} leading-relaxed`}>
+                            {item.desc}
+                          </p>
                         </div>
-                        <h4 className="font-bold text-white mb-2 text-sm leading-snug">{item.title}</h4>
-                        <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
                       </motion.div>
                     );
                   })}

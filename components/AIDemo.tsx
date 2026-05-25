@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MessageSquare, Workflow, Zap } from "lucide-react";
 import { useLang } from "@/lib/LangContext";
@@ -67,20 +68,76 @@ export default function AIDemo() {
 
 /* ── Voice tab ─────────────────────────────── */
 function VoiceTab({ lang, tx }: { lang: string; tx: any }) {
-  const [started, setStarted] = useState(false);
-
   return (
-    <div className="p-8 flex flex-col items-center text-center gap-6">
-      <div className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.25)", color: "#00D4FF" }}>
-        <Zap size={11} /> {tx.badge}
+    <div className="p-8 flex flex-col items-center text-center gap-5">
+      {/* Zaki animated avatar */}
+      <div className="relative flex items-center justify-center" style={{ width: 180, height: 180 }}>
+        {/* Pulsing rings */}
+        {[180, 140, 100].map((size, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: size, height: size,
+              border: `1px solid rgba(0,212,255,${0.12 + i * 0.1})`,
+              animation: `zakiPulse 3s ease-in-out ${i * 0.55}s infinite`,
+            }}
+          />
+        ))}
+        {/* Zaki image or fallback mic orb */}
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="relative z-10"
+          style={{ filter: "drop-shadow(0 0 18px rgba(0,212,255,0.45))" }}
+        >
+          <ZakiOrFallback size={90} />
+        </motion.div>
       </div>
+
+      {/* Live badge */}
+      <div
+        className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full"
+        style={{ background: "rgba(0,230,118,0.1)", border: "1px solid rgba(0,230,118,0.25)", color: "#00E676" }}
+      >
+        <span className="w-1.5 h-1.5 rounded-full bg-[#00E676] animate-pulse" />
+        {lang === "ar" ? "ذكي متاح الآن" : "Zaki is Online"}
+      </div>
+
       <h3 className="text-2xl font-black text-white">{tx.h3}</h3>
       <p className="text-gray-400 max-w-sm text-sm leading-relaxed">{tx.desc}</p>
 
-      <div className="w-full flex flex-col items-center gap-4">
+      <div className="w-full flex flex-col items-center gap-3">
         <elevenlabs-convai agent-id="agent_6801kse15x6afb3t77e4nrqhvfrb" />
         <p className="text-xs text-gray-600">{tx.note}</p>
       </div>
+    </div>
+  );
+}
+
+function ZakiOrFallback({ size }: { size: number }) {
+  return (
+    <div className="relative">
+      <Image
+        src="/zaki.png"
+        alt="ذكي"
+        width={size}
+        height={size}
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+      />
+      {/* Fallback: mic orb shown via CSS if image missing */}
+      <noscript>
+        <div
+          style={{
+            width: size, height: size, borderRadius: "50%",
+            background: "linear-gradient(135deg,rgba(0,212,255,0.2),rgba(123,47,255,0.2))",
+            border: "1px solid rgba(0,212,255,0.4)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}
+        >
+          <Mic size={size * 0.4} color="#00D4FF" />
+        </div>
+      </noscript>
     </div>
   );
 }

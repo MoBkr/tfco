@@ -9,7 +9,7 @@ import { openCal } from "@/lib/openCal";
 import { useInView } from "@/lib/useInView";
 import { useCountUp } from "@/lib/useCountUp";
 
-function initParticles(canvas: HTMLCanvasElement) {
+function initParticles(canvas: HTMLCanvasElement, getMouse: () => [number, number]) {
   const ctx = canvas.getContext("2d")!;
   let W = 0, H = 0;
   const COLORS = ["rgba(0,212,255,", "rgba(123,47,255,", "rgba(212,168,67,"];
@@ -19,18 +19,26 @@ function initParticles(canvas: HTMLCanvasElement) {
   const resize = () => {
     W = canvas.width  = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
-    particles = Array.from({ length: 60 }, () => ({
+    particles = Array.from({ length: 70 }, () => ({
       x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
+      vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
       r: Math.random() * 2 + 0.5,
       ci: Math.floor(Math.random() * 3),
     }));
   };
 
   const draw = () => {
+    const [mx, my] = getMouse();
     ctx.clearRect(0, 0, W, H);
     particles.forEach(p => {
       p.x += p.vx; p.y += p.vy;
+      const dx = p.x - mx, dy = p.y - my;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 120 && dist > 0) {
+        const force = (1 - dist / 120) * 1.6;
+        p.x += (dx / dist) * force;
+        p.y += (dy / dist) * force;
+      }
       if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
       if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
     });
@@ -39,19 +47,23 @@ function initParticles(canvas: HTMLCanvasElement) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const d = Math.hypot(dx, dy);
-        if (d < 140) {
+        if (d < 150) {
+          const midX = (particles[i].x + particles[j].x) / 2;
+          const midY = (particles[i].y + particles[j].y) / 2;
+          const mDist = Math.hypot(midX - mx, midY - my);
+          const boost = mDist < 160 ? (1 - mDist / 160) * 0.22 : 0;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0,212,255,${0.07 * (1 - d / 140)})`;
-          ctx.lineWidth = 0.7;
+          ctx.strokeStyle = `rgba(0,212,255,${(0.07 + boost) * (1 - d / 150)})`;
+          ctx.lineWidth = 0.7 + boost;
           ctx.stroke();
         }
       }
       const p = particles[i];
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = COLORS[p.ci] + "0.55)";
+      ctx.fillStyle = COLORS[p.ci] + "0.6)";
       ctx.fill();
     }
     requestAnimationFrame(draw);
@@ -84,6 +96,7 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef<[number, number]>([-9999, -9999]);
   const badges = lang === "ar" ? BADGES_AR : BADGES_EN;
   const isRTL = lang === "ar";
 
@@ -95,7 +108,7 @@ export default function Hero() {
   useEffect(() => {
     if (!canvasRef.current) return;
     if (window.innerWidth < 768) return;
-    return initParticles(canvasRef.current);
+    return initParticles(canvasRef.current, () => mouseRef.current);
   }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
@@ -105,12 +118,18 @@ export default function Hero() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     el.style.background = `radial-gradient(700px circle at ${x}px ${y}px, rgba(0,212,255,0.08), rgba(123,47,255,0.04) 40%, transparent 65%)`;
+    mouseRef.current = [x, y];
   }, []);
 
   useEffect(() => {
     const el = heroRef.current;
+    const onLeave = () => { mouseRef.current = [-9999, -9999]; };
     el?.addEventListener("mousemove", onMouseMove, { passive: true });
-    return () => el?.removeEventListener("mousemove", onMouseMove);
+    el?.addEventListener("mouseleave", onLeave, { passive: true });
+    return () => {
+      el?.removeEventListener("mousemove", onMouseMove);
+      el?.removeEventListener("mouseleave", onLeave);
+    };
   }, [onMouseMove]);
 
   const statDisplay = [
